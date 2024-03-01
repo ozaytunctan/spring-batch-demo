@@ -31,7 +31,7 @@ public class BatchJobController {
     private final Job transferFileMongoJob;
 
 
-    private final String TEMP_STORAGE = "/ebelediye/home/eBelediye/files/%d/donemler/";
+    private final String TEMP_STORAGE = "/home/files/%d/donemler/";
 
     public BatchJobController(JobLauncher jobLauncher, FileStorageDataRepository fileStorageDataRepository, Job transferFileMongoJob) {
         this.jobLauncher = jobLauncher;
@@ -39,7 +39,7 @@ public class BatchJobController {
         this.transferFileMongoJob = transferFileMongoJob;
     }
 
-    @GetMapping(path = "/start-batch/{municipalityId}")
+    @GetMapping(path = "/start-batch")
     public String startBatch(@RequestParam("municipalityId") Long municipalityId) {
 
 
@@ -53,8 +53,7 @@ public class BatchJobController {
 //            multipartFile.transferTo(fileToImport);
 
             JobParameters jobParameters = new JobParametersBuilder()
-                   // .addString("fullPathFileName", String.format(TEMP_STORAGE, municipalityId))
-                    .addString("fullPathFileName", "/ebelediye/home/eBelediye/files/")
+                   .addString("fullPathFileName", String.format(TEMP_STORAGE, municipalityId))
                     .addLong("startAt", System.currentTimeMillis())
                     .toJobParameters();
 
@@ -77,7 +76,46 @@ public class BatchJobController {
     }
 
 
-    @GetMapping(path = "/start-batch")
+    @GetMapping(path = "/start-batch/{municipalityId}/{period}")
+    public String startBatchFinancialPeriod(@PathVariable("municipalityId") Long municipalityId,@PathVariable("period") Long period) {
+
+
+        // file  -> path we don't know
+        //copy the file to some storage in your VM : get the file path
+        //copy the file to DB : get the file path
+
+        try {
+//            String originalFileName = multipartFile.getOriginalFilename();
+//            File fileToImport = new File(TEMP_STORAGE + originalFileName);
+//            multipartFile.transferTo(fileToImport);
+
+            JobParameters jobParameters = new JobParametersBuilder()
+                    .addString("fullPathFileName", String.format("/ebelediye/home/eBelediye/files/%d/donemler/%d", municipalityId,period))
+                    .addLong("startAt", System.currentTimeMillis())
+                    .toJobParameters();
+
+
+            JobExecution execution = jobLauncher.run(transferFileMongoJob, jobParameters);
+
+//            if(execution.getExitStatus().getExitCode().equals(ExitStatus.COMPLETED)){
+//                //delete the file from the TEMP_STORAGE
+//                Files.deleteIfExists(Paths.get(TEMP_STORAGE + originalFileName));
+//            }
+
+        } catch (JobExecutionAlreadyRunningException
+                 | JobRestartException
+                 | JobInstanceAlreadyCompleteException
+                 | JobParametersInvalidException e) {
+
+            e.printStackTrace();
+        }
+        return "BU IŞ BURADA BITER.!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    }
+
+
+
+
+    /*@GetMapping(path = "/start-batch")
     public String startBatch() {
 
 
@@ -102,7 +140,7 @@ public class BatchJobController {
             e.printStackTrace();
         }
         return "BU IŞ BURADA BITER.!!!!!!!!!!!!!!!!!!!!!!!!!!";
-    }
+    }*/
 
     @GetMapping("/files/{id}")
     public FileStorageData getAllFilesById(@PathVariable String id) {

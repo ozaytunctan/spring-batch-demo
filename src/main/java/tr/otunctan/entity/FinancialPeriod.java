@@ -31,15 +31,11 @@ public class FinancialPeriod extends BaseEntity {
 
     @Column(name = "year", nullable = false, precision = 4)
     private short year;
+    @Column(name = "agencycode")
+    private String  agencyCode;
 
 
     public FinancialPeriod() {
-    }
-
-    public FinancialPeriod(short year, Municipality municipality) {
-        this.year = year;
-        this.municipality = municipality;
-        this.id=getNewId();
     }
 
     public FinancialPeriod(short year, Long municipalityId) {
@@ -62,5 +58,54 @@ public class FinancialPeriod extends BaseEntity {
         return Long.parseLong(String.valueOf(year) + municipality.getId());
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public Municipality getMunicipality() {
+        return municipality;
+    }
+
+    public void setMunicipality(Municipality municipality) {
+        this.municipality = municipality;
+    }
+
+    public short getYear() {
+        return year;
+    }
+
+    public void setYear(short year) {
+        this.year = year;
+    }
+
+    public String getAgencyCode() {
+        return agencyCode;
+    }
+
+    public void setAgencyCode(String agencyCode) {
+        this.agencyCode = agencyCode;
+    }
+
+    @Override
+    public String toString() {
+        return "FinancialPeriod{" +
+                "id=" + id +
+                ", version=" + version +
+                ", municipality=" + municipality +
+                ", year=" + year +
+                ", agencyCode='" + agencyCode + '\'' +
+                '}';
+    }
 }

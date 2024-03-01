@@ -23,7 +23,7 @@ public class FileStorageData implements Serializable {
     private String dataSinifi;
 
     private LocalDateTime islemZamani=LocalDateTime.now();
-    private String islemYapanTc;
+    private Long islemYapanTc;
     private String mimeType;
     private String realPath;
     private String dosyaAdi;
@@ -72,11 +72,11 @@ public class FileStorageData implements Serializable {
         this.islemZamani = islemZamani;
     }
 
-    public String getIslemYapanTc() {
+    public Long getIslemYapanTc() {
         return islemYapanTc;
     }
 
-    public void setIslemYapanTc(String islemYapanTc) {
+    public void setIslemYapanTc(Long islemYapanTc) {
         this.islemYapanTc = islemYapanTc;
     }
 

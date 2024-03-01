@@ -1,5 +1,6 @@
 package tr.otunctan.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,7 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-
+import jakarta.persistence.Transient;
 
 
 /**
@@ -50,7 +51,7 @@ public class AccFileStorage extends Storage  {
     /**
      * Finansal Dönem
      */
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "financial_period_id")
     private FinancialPeriod financialPeriod;
 
@@ -95,6 +96,16 @@ public class AccFileStorage extends Storage  {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+
+    @Transient
+    public Long getPeriodId(){
+        return financialPeriod.getId();
+    }
+    @Transient
+    public String getName(){
+        return type.name();
     }
 
     @Override
